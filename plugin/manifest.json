@@ -9,6 +9,7 @@
       "48": "assets/icon48.png",
       "128": "assets/icon128.png"
     },
+    "default_popup": "mark.html",
     "default_title": "Mark"
   },
   "permissions": [
