@@ -4,14 +4,13 @@ function getHtml(selector) {
 }
 
 function onMessage(request, _sender, sendResponse) {
-  let response;
   const { selector, type } = JSON.parse(request);
+  let response = { type: `${type}Response` };
 
-  if (type === 'requestHtml') {
-    response = {
-      html: getHtml(selector),
-      type: 'requestHtmlResponse'
-    };
+  if (type === 'checkScript') {
+
+  } else if (type === 'requestHtml') {
+    response.html = getHtml(selector)
   }
 
   sendResponse(JSON.stringify(response));

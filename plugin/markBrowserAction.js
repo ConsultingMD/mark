@@ -1,13 +1,20 @@
-function initializeMark(tabs) {
-  activeTab = tabs[0];
-  chrome.tabs.executeScript(activeTab.id, { file: "markContentScript.js" });
+function initializeMark(filteredTabs) {
+  activeTab = filteredTabs[0];
+  const message = JSON.stringify({ type: 'checkScript' });
+  sendMessage(message);
 }
 
 function onMessage(response) {
-  const parsedReponse = JSON.parse(response);
+  if (response === undefined) {
+    startContentScript();
+  } else {
+    const { html, type } = JSON.parse(response);
 
-  if (parsedReponse.type === 'requestHtmlResponse') {
-    setHtml(parsedReponse.html);
+    if (type === 'checkScriptResponse') {
+
+    } else if (type === 'requestHtmlResponse') {
+      setHtml(html);
+    }
   }
 }
 
@@ -28,6 +35,10 @@ function sendMessage(message) {
 
 function setHtml(html) {
   htmlInput.value = html;
+}
+
+function startContentScript() {
+  chrome.tabs.executeScript(activeTab.id, { file: "markContentScript.js" });
 }
 
 let activeTab = null;
