@@ -13,13 +13,15 @@ function onMessage(response) {
     if (type === 'checkScriptResponse') {
 
     } else if (type === 'requestHtmlResponse') {
-      setHtml(html);
+      setPopupHtml(html);
+    } else if (type === 'setPageHtmlResponse') {
+
     }
   }
 }
 
 function requestHtml() {
-  const selector = selctorInput.value;
+  const selector = selectorInput.value;
   if (selector === '') return;
   const request = {
     selector,
@@ -33,7 +35,20 @@ function sendMessage(message) {
   chrome.tabs.sendMessage(activeTab.id, message, onMessage);
 }
 
-function setHtml(html) {
+function setPageHtml() {
+  const html = htmlInput.value;
+  const selector = selectorInput.value;
+  if (html === '' || selector === '') return;
+  const request = {
+    html,
+    selector,
+    type: 'setPageHtml',
+  };
+  const message = JSON.stringify(request);
+  sendMessage(message);
+}
+
+function setPopupHtml(html) {
   htmlInput.value = html;
 }
 
@@ -43,9 +58,11 @@ function startContentScript() {
 
 let activeTab = null;
 const getHtmlButton = document.getElementById('action-get-html');
-const selctorInput = document.getElementById('m-selector');
+const setHtmlButton = document.getElementById('action-set-html');
+const selectorInput = document.getElementById('m-selector');
 const htmlInput = document.getElementById('m-html');
 
 chrome.tabs.query({ active: true, currentWindow: true }, initializeMark);
 
 getHtmlButton.addEventListener('click', requestHtml)
+setHtmlButton.addEventListener('click', setPageHtml);

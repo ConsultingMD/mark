@@ -11,6 +11,6 @@
   width: 300px;
 }
 
-.m-input {
+.m-input, button {
   outline: none;
 }
