@@ -1,5 +1,13 @@
-#m-content {
-  height: 100px;
+#action-container {
+  float: right;
+}
+
+#m-html {
+  height: 400px;
+  width: 700px;
+}
+
+#m-selector {
   width: 300px;
 }
 
