@@ -1,3 +1,10 @@
+function beautifyHtml() {
+  const html = htmlInput.value;
+  if (html === '') return;
+  const beautifiedHtml = html_beautify(html, { indent_size: 2 });
+  setPopupHtml(beautifiedHtml);
+}
+
 function initializeMark(filteredTabs) {
   activeTab = filteredTabs[0];
   const message = JSON.stringify({ type: 'checkScript' });
@@ -57,12 +64,14 @@ function startContentScript() {
 }
 
 let activeTab = null;
+const beautifyButton = document.getElementById('action-beautify-html');
 const getHtmlButton = document.getElementById('action-get-html');
 const setHtmlButton = document.getElementById('action-set-html');
-const selectorInput = document.getElementById('m-selector');
 const htmlInput = document.getElementById('m-html');
+const selectorInput = document.getElementById('m-selector');
 
 chrome.tabs.query({ active: true, currentWindow: true }, initializeMark);
 
-getHtmlButton.addEventListener('click', requestHtml)
+beautifyButton.addEventListener('click', beautifyHtml);
+getHtmlButton.addEventListener('click', requestHtml);
 setHtmlButton.addEventListener('click', setPageHtml);
