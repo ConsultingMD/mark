@@ -1,7 +1,11 @@
+const cache = {
+  selector: '',
+  stagingMarkup: '',
+};
+
 function getSelection(selector) {
   return document.querySelectorAll(selector)[0];
 }
-
 
 function getHtml(selector) {
   const selection = getSelection(selector);
@@ -14,15 +18,22 @@ function setPageHtml(html, selector) {
 }
 
 function onMessage(request, _sender, sendResponse) {
-  const { html, selector, type } = JSON.parse(request);
+  const parsedRequest = JSON.parse(request);
+  const { html, selector, type } = parsedRequest;
   let response = { type: `${type}Response` };
 
   if (type === 'checkScript') {
-
+    response.html = cache.stagingMarkup;
+    response.selector = cache.selector;
   } else if (type === 'requestHtml') {
-    response.html = getHtml(selector);
+    const pageHtml = getHtml(selector);
+    response.html = pageHtml;
+    cache.stagingMarkup = pageHtml;
   } else if (type === 'setPageHtml') {
     setPageHtml(html, selector);
+  } else if (type === 'updateCache') {
+    const { target, value } = parsedRequest;
+    cache[target] = value;
   }
 
   sendResponse(JSON.stringify(response));
